@@ -1,10 +1,10 @@
 ### llm_assignment_priyanka
 This repository is created to do the assignment for KISS ❤️ LLM LAB
 To run
-pip3 install -r requirements.txt
-export OPEN_AI_API_KEY="<fill your key here>"
-python3 application.py
-python -m unittest test_application.py
+1)pip3 install -r requirements.txt
+2)export OPEN_AI_API_KEY="<fill your key here>"
+3)python3 application.py
+4) python -m unittest test_application.py
 copy instance of database from here https://www.kaggle.com/datasets/terencicp/e-commerce-dataset-by-olist-as-an-sqlite-database/data
 
 # KISS ❤️ LLM LAB Entry Assignment

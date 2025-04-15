@@ -1,4 +1,3 @@
-
 from openai import OpenAI
 from openai import AzureOpenAI
 import os
@@ -6,6 +5,8 @@ import json
 
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
+import pandas as pd
+import csv
 
 # Load environment variables from .env file
 load_dotenv(dotenv_path="/Users/priyanka.raghavan/Documents/llmassignment/llm_assignment_priyanka/myenv.env")
@@ -520,4 +521,108 @@ def getaccuracypercentage(sqlqueryans,llmqueryans):
         print(e)
         return 0
 
+
+def getsummaryfromresumedatacsv():
+    try:        
+        second_column_data = extract_second_column('resume/resumedata.csv')
+        if second_column_data:
+            print("Second Column Data:")
+        #for data in second_column_data[:5]:  # Print first 5 rows for brevity
+        #    print(data)
+        return second_column_data
+    except Exception as e:
+        print(e)
+        return None
+
+def extract_all_manualchecklistintolist(file_path):
+    try:
+        data_list = []
+        with open(file_path, mode='r', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip the header row
+            for row in reader:
+                data_list.append(row)  
+        return data_list
+    except Exception as e:
+        print(f"Error reading CSV file: {e}")
+        return None
+
+def extract_second_column(file_path):
+    try:
+        with open(file_path, mode='r', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip the header row
+            second_column_data = [row[1] for row in reader if len(row) > 1]
+        return second_column_data
+    except Exception as e:
+        print(f"Error reading CSV file: {e}")
+        return None
+def getcountofskills(skillchecklist):
+    try:
+        if skillchecklist is None:
+            return 0
+        if len(skillchecklist)<=0:
+            return 0
+        count=0
+        for skill in skillchecklist:
+            count+=1
+        return count
+    except Exception as e:
+        print(e)
+        return 0  
+    
+def percentagesimilaritysummaryssameaschecklist(summary,checklist):
+    try:
+
+        if summary is None or checklist is None:
+            return 0
+        if len(summary)<=0 or len(checklist)<=0:
+            return 0
+        count=getcountofskills(checklist)
+        countsummary=0
+        for skill in summary:
+            skilllowercase= skill.replace(" ", "").lower()
+            for check in checklist:                
+                checklowercase= check.replace(" ", "").lower()
+                if skilllowercase == checklowercase or skilllowercase in checklowercase or checklowercase in skilllowercase:
+                    countsummary += 1
+                    break
+        if countsummary==count:
+            return 100
+        else:
+            if count==0:
+                return 0
+            else:
+                return countsummary/count*100
+            
+    except Exception as e:
+        print(e)
+        return 0
+def percentagesimilaritysummaryssameaschecklistSTR(summary,checklist):
+    try:
+
+        if summary is None or checklist is None:
+            return 0
+        lowercase_summary = summary.replace(" ", "").lower()
+        lowercase_checklist = checklist.replace(" ", "").lower()
+        if lowercase_summary== lowercase_checklist or lowercase_summary in lowercase_checklist or lowercase_checklist in lowercase_summary:
+            return 100
+        else:
+            return 0
+    except Exception as e:
+        print(e)
+        return 0
+def percentagesimilaritysummaryssameaschecklistINT(summary,checklist):
+    try:
+
+        if summary is None or checklist is None:
+            return 0
+        if summary== checklist:
+            return 100
+        else:
+            return 0
+    except Exception as e:
+        print(e)
+        return 0
+    
 
